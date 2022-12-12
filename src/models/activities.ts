@@ -7,3 +7,7 @@ export interface IActivity {
   price: number;
   type: string;
 }
+
+export interface IBoredAPIAnswer {
+  data: IActivity;
+}
