@@ -172,7 +172,8 @@ export const App = () => {
                 }}
                 isErrorMessage
               >
-                <Text>Sorry, something went wrong</Text>
+                <Text>Sorry, i'm not feeling well right now 🤕 I </Text>
+                <Text>Can you make sure that you are online 🛜 ?</Text>
                 <Button
                   colorScheme="bubble.error"
                   variant="solid"
