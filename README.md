@@ -1,5 +1,8 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+## Description
+
+BoredBot is a chatbot that helps you find something to do in case you're bored.
+
+This app was designed for [vivlio](https://www.vivlio.com/) react challenge
 
 ## Available Scripts
 
