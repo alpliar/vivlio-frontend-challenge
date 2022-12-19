@@ -1,120 +1,31 @@
-import { RepeatIcon } from "@chakra-ui/icons";
 import {
-  Button,
   Center,
   ChakraProvider,
   Flex,
-  Heading,
   SlideFade,
   Stack,
 } from "@chakra-ui/react";
-import { useEffect, useReducer, useRef, useState } from "react";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import { MessageImage } from "./constants/messages.constants";
+import { useEffect, useRef } from "react";
+import AnswerButtons from "./AnswerButtons";
+import { useAppSelector } from "./app/hooks";
+import { RootState } from "./app/store";
+import ButtonBored from "./ButtonBored";
+import Header from "./Header";
 import Message from "./Message";
-import MessageButton from "./MessageButton";
-import IMessage from "./models/message.model";
-import {
-  defaultState,
-  MessageActionKind,
-  rootReducer,
-} from "./reducers/root.reducer";
-import ActivityHelper from "./services/activities.service";
+import MessageError from "./MessageError";
 import customTheme from "./theme";
 
 export const App = () => {
   const bottomRef = useRef<null | HTMLDivElement>(null);
-  const [state, dispatch] = useReducer(rootReducer, defaultState);
-  const [error, setError] = useState<unknown>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isActivityAccepted, setIsActivityAccepted] = useState<boolean>(false);
-  const [isUserBored, setIsUserBored] = useState<boolean>(false);
-
-  const saveMessage = (message: IMessage) => {
-    dispatch({
-      type: MessageActionKind.ADD,
-      payload: message,
-    });
-  };
-
-  const handleRetry = () => {
-    saveMessage({
-      text: "Could you please retry ?",
-    });
-    fetchActivity();
-  };
-
-  const handleReset = () => {
-    setIsActivityAccepted(false);
-    setIsUserBored(true);
-    dispatch({
-      type: MessageActionKind.RESET,
-    });
-    dispatch({
-      type: MessageActionKind.ADD,
-      payload: {
-        isBotMessage: false,
-        text: "I'm bored, help !",
-        // image: MessageImage.Bored,
-      },
-    });
-    fetchActivity();
-  };
-
-  const handleRefuseActivity = () => {
-    saveMessage({
-      text: "Hmm... Maybe another time 🙃",
-      image: MessageImage.Hmm,
-    });
-    fetchActivity();
-  };
-
-  const handleAcceptActivity = () => {
-    setIsActivityAccepted(true);
-    setIsUserBored(false);
-    saveMessage({
-      text: "Thank's, that sounds nice 😁 !",
-      image: MessageImage.Nice,
-    });
-    saveMessage({
-      text: "No problem, feel free to come back to me next time you're bored 😊",
-      isBotMessage: true,
-      isDelayed: true,
-    });
-  };
-
-  const fetchActivity = (ignore: boolean = false) => {
-    setIsLoading(true);
-
-    ActivityHelper.getRandomActivity()
-      .then((newActivity) => {
-        if (!ignore)
-          saveMessage({
-            isBotMessage: true,
-            activity: newActivity,
-            isDelayed: true,
-          });
-        setError(undefined);
-      })
-      .catch((error) => {
-        saveMessage({
-          text: "Sorry, i'm not feeling well right now 🤕 Can you make sure that you are online 🛜 ?",
-          isBotMessage: true,
-          isErrorMessage: true,
-          isDelayed: true,
-        });
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+  const { error, messages, isUserBored, isAnswerNeeded } = useAppSelector(
+    (state: RootState) => state.chat
+  );
 
   useEffect(() => {
     // scroll to bottom every time messages change
     if (bottomRef.current && bottomRef.current.scrollIntoView)
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [state.messages, error, isUserBored]);
+  }, [messages, error, isUserBored]);
 
   return (
     <ChakraProvider theme={customTheme}>
@@ -127,84 +38,29 @@ export const App = () => {
           p={3}
           width={{ base: "sm", sm: "md", md: "xl", lg: "2xl" }}
         >
-          <Flex p={4} justify="space-between">
-            <Stack align="center">
-              <Heading fontWeight="bold">BoredBot</Heading>
-            </Stack>
-            <ColorModeSwitcher justifySelf="flex-end" />
-          </Flex>
+          <Header />
 
           <Stack overflowY="auto" flex={2} py={3} spacing={4}>
-            {state.messages.length &&
-              state.messages.map((message, index) => (
-                <>
-                  <Message key={index} message={message} />
-                </>
+            {messages.length &&
+              messages.map((message, index) => (
+                <Message key={index} message={message} />
               ))}
-            {!error && !isLoading && (
-              <>
-                {!isActivityAccepted && isUserBored && (
-                  <SlideFade in>
-                    <Message
-                      message={{
-                        isBotMessage: false,
-                        isDelayed: true,
-                      }}
-                    >
-                      <Button
-                        variant="outline"
-                        colorScheme="black"
-                        onClick={handleAcceptActivity}
-                      >
-                        Thanks 😁 !
-                      </Button>
-                      <Button
-                        variant="outline"
-                        colorScheme="black"
-                        onClick={handleRefuseActivity}
-                      >
-                        Hmm...
-                      </Button>
-                    </Message>
-                  </SlideFade>
-                )}
-                {(isActivityAccepted || !isUserBored) && (
-                  <Message
-                    message={{
-                      isBotMessage: false,
-                      isDelayed: true,
-                    }}
-                  >
-                    <Button
-                      variant="outline"
-                      colorScheme="black"
-                      leftIcon={<RepeatIcon />}
-                      onClick={handleReset}
-                    >
-                      I'm bored...
-                    </Button>
-                  </Message>
-                )}
-              </>
+            {isAnswerNeeded && (
+              <SlideFade in>
+                <AnswerButtons />
+              </SlideFade>
+            )}
+            {!isUserBored && (
+              <SlideFade in>
+                <ButtonBored />
+              </SlideFade>
             )}
             {!!error && (
-              <>
-                <Message
-                  message={{
-                    isBotMessage: false,
-                  }}
-                >
-                  <Flex justifyContent="end">
-                    <MessageButton
-                      leftIcon={<RepeatIcon />}
-                      onClick={handleRetry}
-                    >
-                      Could you please retry ?
-                    </MessageButton>
-                  </Flex>
-                </Message>
-              </>
+              <SlideFade in>
+                <MessageError />
+              </SlideFade>
             )}
+
             <div ref={bottomRef} />
           </Stack>
         </Flex>

@@ -12,12 +12,12 @@ if (!container) throw new Error("Failed to find the root element");
 const root = ReactDOM.createRoot(container);
 
 root.render(
-  <React.StrictMode>
-    <ColorModeScript />
-    <Provider store={store}>
+  <Provider store={store}>
+    <React.StrictMode>
+      <ColorModeScript />
       <App />
-    </Provider>
-  </React.StrictMode>
+    </React.StrictMode>
+  </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -1,21 +1,35 @@
 import { screen, waitFor } from "@testing-library/react";
+import { Provider } from "react-redux";
 import { App } from "./App";
+import { store } from "./app/store";
 import { render } from "./test-utils";
 
 test("renders bot reaction", () => {
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   const linkElement = screen.getByText(/how can i help/i);
   expect(linkElement).toBeInTheDocument();
 });
 
 test("renders user action", () => {
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   const buttonElement = screen.getByText(/i'm bored/i);
   expect(buttonElement).toBeInTheDocument();
 });
 
 test("bot answers to bored user", () => {
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   const buttonElement = screen.getByText(/i'm bored/i);
   buttonElement.click();
 
@@ -26,7 +40,11 @@ test("bot answers to bored user", () => {
 });
 
 test("user can reply to bot activity proposition", () => {
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   const buttonElement = screen.getByText(/i'm bored/i);
   buttonElement.click();
 
@@ -39,7 +57,11 @@ test("user can reply to bot activity proposition", () => {
 });
 
 test("bot proposes new activity after user has declined", () => {
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   const buttonElement = screen.getByText(/i'm bored/i);
   buttonElement.click();
 
@@ -54,7 +76,11 @@ test("bot proposes new activity after user has declined", () => {
 });
 
 test("user can restart after accepting activity", () => {
-  render(<App />);
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   const buttonElement = screen.getByText(/i'm bored/i);
   buttonElement.click();
 
