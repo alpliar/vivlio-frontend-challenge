@@ -4,6 +4,8 @@ BoredBot is a chatbot that helps you find something to do in case you're bored.
 
 This app was designed for [vivlio](https://www.vivlio.com/) react challenge
 
+A live demo is available at [bored-bot-alpliar.vercel.app](https://bored-bot-alpliar.vercel.app/)
+
 ## Available Scripts
 
 In the project directory, you can run:
