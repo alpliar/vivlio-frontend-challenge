@@ -1,19 +1,19 @@
 import { RepeatIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   Center,
   ChakraProvider,
   Flex,
   Heading,
+  SlideFade,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import Message from "./Message";
 import MessageButton from "./MessageButton";
 import { IActivity } from "./models/activity.model";
+import IMessage from "./models/message.model";
 import {
   defaultState,
   MessageActionKind,
@@ -30,29 +30,21 @@ export const App = () => {
   const [isActivityAccepted, setIsActivityAccepted] = useState<boolean>(false);
   const [isUserBored, setIsUserBored] = useState<boolean>(false);
 
-  const saveMessage = (
-    text: string | undefined = undefined,
-    isBotMessage: boolean = false,
-    activity: IActivity | undefined = undefined,
-    isErrorMessage: boolean | undefined = false
-  ) => {
+  const saveMessage = (message: IMessage) => {
     dispatch({
       type: MessageActionKind.ADD,
-      payload: {
-        text,
-        activity,
-        isBotMessage,
-        isErrorMessage,
-      },
+      payload: message,
     });
   };
 
   const handleRetry = () => {
-    saveMessage("Could you please retry ?");
+    saveMessage({ text: "Could you please retry ?" });
     fetchActivity();
   };
 
   const handleReset = () => {
+    setIsActivityAccepted(false);
+    setIsUserBored(true);
     dispatch({
       type: MessageActionKind.RESET,
     });
@@ -61,26 +53,26 @@ export const App = () => {
       payload: {
         isBotMessage: false,
         text: "I'm bored",
+        isDelayed: true,
       },
     });
-    setIsActivityAccepted(false);
-    setIsUserBored(true);
     fetchActivity();
   };
 
   const handleRefuseActivity = () => {
-    saveMessage("Maybe another time 🙃");
+    saveMessage({ text: "Maybe another time 🙃" });
     fetchActivity();
   };
 
   const handleAcceptActivity = () => {
     setIsActivityAccepted(true);
     setIsUserBored(false);
-    saveMessage("Thank's, that's what i needed 😁 !");
-    saveMessage(
-      "No problem, feel free to come back to me next time you're bored 😊",
-      true
-    );
+    saveMessage({ text: "Thank's, that's what i needed 😁 !" });
+    saveMessage({
+      text: "No problem, feel free to come back to me next time you're bored 😊",
+      isBotMessage: true,
+      isDelayed: true,
+    });
   };
 
   const fetchActivity = (ignore: boolean = false) => {
@@ -88,16 +80,21 @@ export const App = () => {
 
     ActivityHelper.getRandomActivity()
       .then((newActivity) => {
-        if (!ignore) saveMessage(undefined, true, newActivity);
+        if (!ignore)
+          saveMessage({
+            isBotMessage: true,
+            activity: newActivity,
+            isDelayed: true,
+          });
         setError(undefined);
       })
       .catch((error) => {
-        saveMessage(
-          "Sorry, i'm not feeling well right now 🤕 Can you make sure that you are online 🛜 ?",
-          true,
-          undefined,
-          true
-        );
+        saveMessage({
+          text: "Sorry, i'm not feeling well right now 🤕 Can you make sure that you are online 🛜 ?",
+          isBotMessage: true,
+          isErrorMessage: true,
+          isDelayed: true,
+        });
         setError(error);
       })
       .finally(() => {
@@ -132,36 +129,42 @@ export const App = () => {
           <Stack overflowY="auto" flex={2} py={3} spacing={4}>
             {state.messages.length &&
               state.messages.map((message, index) => (
-                <Message key={index} message={message} />
+                <>
+                  <Message key={index} message={message} />
+                </>
               ))}
             {!error && !isLoading && (
               <>
                 {!isActivityAccepted && isUserBored && (
-                  <Message
-                    message={{
-                      isBotMessage: false,
-                    }}
-                  >
-                    <Button
-                      variant="outline"
-                      colorScheme="black"
-                      onClick={handleAcceptActivity}
+                  <SlideFade in>
+                    <Message
+                      message={{
+                        isBotMessage: false,
+                        isDelayed: true,
+                      }}
                     >
-                      Thanks, that's what i needed 😁 !
-                    </Button>
-                    <Button
-                      variant="outline"
-                      colorScheme="black"
-                      onClick={handleRefuseActivity}
-                    >
-                      Maybe another time 🙃
-                    </Button>
-                  </Message>
+                      <Button
+                        variant="outline"
+                        colorScheme="black"
+                        onClick={handleAcceptActivity}
+                      >
+                        Thanks, that's what i needed 😁 !
+                      </Button>
+                      <Button
+                        variant="outline"
+                        colorScheme="black"
+                        onClick={handleRefuseActivity}
+                      >
+                        Maybe another time 🙃
+                      </Button>
+                    </Message>
+                  </SlideFade>
                 )}
                 {(isActivityAccepted || !isUserBored) && (
                   <Message
                     message={{
                       isBotMessage: false,
+                      isDelayed: true,
                     }}
                   >
                     <Button

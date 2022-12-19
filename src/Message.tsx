@@ -1,4 +1,4 @@
-import { Fade, Stack, StackProps, Text } from "@chakra-ui/react";
+import { SlideFade, Stack, StackProps, Text } from "@chakra-ui/react";
 import React from "react";
 import BotAvatar from "./BotAvatar";
 import Bubble, { IBubbleProps } from "./Bubble";
@@ -37,8 +37,13 @@ const Message: React.FC<IMessageProps> = ({ children, message }) => {
   const stackDirection: StackProps["direction"] = message.isBotMessage
     ? "row"
     : "row-reverse";
+  const delay = message.isBotMessage ? 0.5 : 1.5;
   return (
-    <Fade in>
+    <SlideFade
+      in
+      delay={message.isDelayed ? delay : 0}
+      offsetY={message.isBotMessage ? 0 : 50}
+    >
       <Stack padding={1} direction={stackDirection} align="flex-end">
         {message.isBotMessage ? (
           <BotAvatar isOnline={!message.isErrorMessage} />
@@ -55,7 +60,7 @@ const Message: React.FC<IMessageProps> = ({ children, message }) => {
           {message.activity && <MessageActivity activity={message.activity} />}
         </Bubble>
       </Stack>
-    </Fade>
+    </SlideFade>
   );
 };
 
