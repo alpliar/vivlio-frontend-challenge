@@ -9,7 +9,6 @@ import UserAvatar from "./UserAvatar";
 export type IMessageProps = {
   children?: React.ReactNode;
   message: IMessage;
-  isErrorMessage?: boolean;
 };
 
 export const bubbleStyle: IBubbleProps = {
@@ -34,22 +33,22 @@ export const userBubbleStyle: IBubbleProps = {
   color: "black",
 };
 
-const Message: React.FC<IMessageProps> = ({
-  children,
-  message,
-  isErrorMessage = false,
-}) => {
+const Message: React.FC<IMessageProps> = ({ children, message }) => {
   const stackDirection: StackProps["direction"] = message.isBotMessage
     ? "row"
     : "row-reverse";
   return (
     <Fade in>
       <Stack padding={1} direction={stackDirection} align="flex-end">
-        {message.isBotMessage ? <BotAvatar /> : <UserAvatar />}
+        {message.isBotMessage ? (
+          <BotAvatar isOnline={!message.isErrorMessage} />
+        ) : (
+          <UserAvatar />
+        )}
         <Bubble
           {...bubbleStyle}
           {...(message.isBotMessage ? botBubbleStyle : userBubbleStyle)}
-          {...(isErrorMessage && errorBubbleStyle)}
+          {...(message.isErrorMessage && errorBubbleStyle)}
         >
           {children}
           {message.text && <Text>{message.text}</Text>}

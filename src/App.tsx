@@ -1,5 +1,6 @@
 import { RepeatIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   Center,
   ChakraProvider,
@@ -11,6 +12,7 @@ import {
 import { useEffect, useReducer, useRef, useState } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import Message from "./Message";
+import MessageButton from "./MessageButton";
 import { IActivity } from "./models/activity.model";
 import {
   defaultState,
@@ -31,7 +33,8 @@ export const App = () => {
   const saveMessage = (
     text: string | undefined = undefined,
     isBotMessage: boolean = false,
-    activity: IActivity | undefined = undefined
+    activity: IActivity | undefined = undefined,
+    isErrorMessage: boolean | undefined = false
   ) => {
     dispatch({
       type: MessageActionKind.ADD,
@@ -39,11 +42,13 @@ export const App = () => {
         text,
         activity,
         isBotMessage,
+        isErrorMessage,
       },
     });
   };
 
   const handleRetry = () => {
+    saveMessage("Could you please retry ?");
     fetchActivity();
   };
 
@@ -87,6 +92,12 @@ export const App = () => {
         setError(undefined);
       })
       .catch((error) => {
+        saveMessage(
+          "Sorry, i'm not feeling well right now 🤕 Can you make sure that you are online 🛜 ?",
+          true,
+          undefined,
+          true
+        );
         setError(error);
       })
       .finally(() => {
@@ -98,7 +109,7 @@ export const App = () => {
     // scroll to bottom every time messages change
     if (bottomRef.current && bottomRef.current.scrollIntoView)
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [state.messages]);
+  }, [state.messages, error, isUserBored]);
 
   return (
     <ChakraProvider theme={customTheme}>
@@ -166,24 +177,22 @@ export const App = () => {
               </>
             )}
             {!!error && (
-              <Message
-                message={{
-                  isBotMessage: true,
-                }}
-                isErrorMessage
-              >
-                <Text>Sorry, i'm not feeling well right now 🤕 I </Text>
-                <Text>Can you make sure that you are online 🛜 ?</Text>
-                <Button
-                  colorScheme="bubble.error"
-                  variant="solid"
-                  isLoading={isLoading}
-                  leftIcon={<RepeatIcon />}
-                  onClick={handleRetry}
+              <>
+                <Message
+                  message={{
+                    isBotMessage: false,
+                  }}
                 >
-                  Retry
-                </Button>
-              </Message>
+                  <Flex justifyContent="end">
+                    <MessageButton
+                      leftIcon={<RepeatIcon />}
+                      onClick={handleRetry}
+                    >
+                      Could you please retry ?
+                    </MessageButton>
+                  </Flex>
+                </Message>
+              </>
             )}
             <div ref={bottomRef} />
           </Stack>
