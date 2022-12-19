@@ -1,5 +1,4 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MessageImage } from "../../../constants/messages.constants";
 import { IActivity } from "../../../models/activity.model";
 import IMessage from "../../../models/message.model";
