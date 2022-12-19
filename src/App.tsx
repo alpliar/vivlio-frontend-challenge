@@ -52,22 +52,21 @@ export const App = () => {
       type: MessageActionKind.ADD,
       payload: {
         isBotMessage: false,
-        text: "I'm bored",
-        isDelayed: true,
+        text: "I'm bored, help !",
       },
     });
     fetchActivity();
   };
 
   const handleRefuseActivity = () => {
-    saveMessage({ text: "Maybe another time 🙃" });
+    saveMessage({ text: "Hmm... Maybe another time 🙃" });
     fetchActivity();
   };
 
   const handleAcceptActivity = () => {
     setIsActivityAccepted(true);
     setIsUserBored(false);
-    saveMessage({ text: "Thank's, that's what i needed 😁 !" });
+    saveMessage({ text: "Thank's, i'm going to 😁 !" });
     saveMessage({
       text: "No problem, feel free to come back to me next time you're bored 😊",
       isBotMessage: true,
@@ -148,14 +147,14 @@ export const App = () => {
                         colorScheme="black"
                         onClick={handleAcceptActivity}
                       >
-                        Thanks, that's what i needed 😁 !
+                        Thanks 😁 !
                       </Button>
                       <Button
                         variant="outline"
                         colorScheme="black"
                         onClick={handleRefuseActivity}
                       >
-                        Maybe another time 🙃
+                        Hmm...
                       </Button>
                     </Message>
                   </SlideFade>
