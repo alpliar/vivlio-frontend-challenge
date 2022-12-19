@@ -46,6 +46,7 @@ export const defaultState: IRootState = {
     {
       text: "Hi, how can i help ?",
       isBotMessage: true,
+      isDelayed: true,
     },
   ],
   // error: undefined,
