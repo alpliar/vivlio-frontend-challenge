@@ -10,9 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useReducer, useRef, useState } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import { MessageImage } from "./constants/messages.constants";
 import Message from "./Message";
 import MessageButton from "./MessageButton";
-import { IActivity } from "./models/activity.model";
 import IMessage from "./models/message.model";
 import {
   defaultState,
@@ -38,7 +38,9 @@ export const App = () => {
   };
 
   const handleRetry = () => {
-    saveMessage({ text: "Could you please retry ?" });
+    saveMessage({
+      text: "Could you please retry ?",
+    });
     fetchActivity();
   };
 
@@ -53,20 +55,27 @@ export const App = () => {
       payload: {
         isBotMessage: false,
         text: "I'm bored, help !",
+        // image: MessageImage.Bored,
       },
     });
     fetchActivity();
   };
 
   const handleRefuseActivity = () => {
-    saveMessage({ text: "Hmm... Maybe another time 🙃" });
+    saveMessage({
+      text: "Hmm... Maybe another time 🙃",
+      image: MessageImage.Hmm,
+    });
     fetchActivity();
   };
 
   const handleAcceptActivity = () => {
     setIsActivityAccepted(true);
     setIsUserBored(false);
-    saveMessage({ text: "Thank's, i'm going to 😁 !" });
+    saveMessage({
+      text: "Thank's, that sounds nice 😁 !",
+      image: MessageImage.Nice,
+    });
     saveMessage({
       text: "No problem, feel free to come back to me next time you're bored 😊",
       isBotMessage: true,

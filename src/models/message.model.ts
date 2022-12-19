@@ -6,4 +6,5 @@ export default interface IMessage {
   isBotMessage?: boolean;
   isErrorMessage?: boolean;
   isDelayed?: boolean;
+  image?: string;
 }

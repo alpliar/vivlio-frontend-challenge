@@ -4,7 +4,7 @@ const overrides = extendTheme({
   colors: {
     bubble: {
       user: baseTheme.colors.orange,
-      bot: baseTheme.colors.teal,
+      bot: baseTheme.colors.cyan,
       error: baseTheme.colors.red,
     },
   },
