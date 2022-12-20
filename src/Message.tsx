@@ -19,7 +19,7 @@ export type IMessageProps = {
 };
 
 export const bubbleStyle: IBubbleProps = {
-  maxWidth: "md",
+  maxWidth: { base: "2xs", md: "sm" },
 };
 
 export const errorBubbleStyle: IBubbleProps = {
