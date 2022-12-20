@@ -91,6 +91,7 @@ export const messagesSlice = createSlice({
     },
     retryFetchActivity: (state) => {
       state.messages = state.messages.concat(retryFetchActivityMessage);
+      state.error = undefined;
     },
   },
   extraReducers(builder) {
