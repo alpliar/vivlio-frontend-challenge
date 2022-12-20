@@ -22,6 +22,7 @@ const MessageError = (props: Props) => {
     <Message
       message={{
         isBotMessage: false,
+        isDelayed: true,
       }}
     >
       <Flex justifyContent="end">
