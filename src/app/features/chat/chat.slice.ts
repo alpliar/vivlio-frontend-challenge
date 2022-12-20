@@ -48,6 +48,7 @@ const errorMessage: IMessage = {
   text: "Sorry, i'm not feeling well right now 🤕 Can you make sure that you are online 🛜 ?",
   isBotMessage: true,
   isErrorMessage: true,
+  isDelayed: true,
 };
 
 export const messagesSlice = createSlice({
