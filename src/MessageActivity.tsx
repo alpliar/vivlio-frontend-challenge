@@ -10,6 +10,7 @@ const tagStyle: TagProps = {
   colorScheme: "bubble.bot",
   variant: "solid",
   size: "lg",
+  color: "black",
 };
 
 const MessageActivity: React.FC<IMessageActivityProps> = ({
