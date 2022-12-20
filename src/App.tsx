@@ -25,7 +25,7 @@ export const App = () => {
     // scroll to bottom every time messages change
     if (bottomRef.current && bottomRef.current.scrollIntoView)
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [messages, error, isUserBored]);
+  }, [messages, isAnswerNeeded]);
 
   return (
     <ChakraProvider theme={customTheme}>
