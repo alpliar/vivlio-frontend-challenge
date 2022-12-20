@@ -17,15 +17,14 @@ import customTheme from "./theme";
 
 export const App: React.FC = () => {
   const bottomRef = useRef<null | HTMLDivElement>(null);
-  const { error, messages, isUserBored, isAnswerNeeded } = useAppSelector(
-    (state: RootState) => state.chat
-  );
+  const { error, messages, isUserBored, isAnswerNeeded, isActivityAccepted } =
+    useAppSelector((state: RootState) => state.chat);
 
   useEffect(() => {
     // scroll to bottom every time messages change
     if (bottomRef.current && bottomRef.current.scrollIntoView)
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isAnswerNeeded]);
+  }, [messages, isAnswerNeeded, isActivityAccepted]);
 
   return (
     <ChakraProvider theme={customTheme}>
