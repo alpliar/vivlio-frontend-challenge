@@ -9,10 +9,9 @@ import { useAppDispatch } from "./app/hooks";
 import Message from "./Message";
 import MessageButton from "./MessageButton";
 
-type Props = {};
-
-const MessageError = (props: Props) => {
+const MessageError: React.FC = () => {
   const dispatch = useAppDispatch();
+
   const handleRetry = () => {
     dispatch(retryFetchActivity());
     dispatch(fetchActivity());

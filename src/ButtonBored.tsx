@@ -3,25 +3,21 @@ import { Button } from "@chakra-ui/react";
 import {
   addMessage,
   fetchActivity,
-  resetChat,
   setIsUserBored,
 } from "./app/features/chat/chat.slice";
 import { useAppDispatch } from "./app/hooks";
 import Message from "./Message";
 
-type Props = {};
-
-const ButtonBored = (props: Props) => {
+const ButtonBored: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    dispatch(resetChat());
     dispatch(setIsUserBored(true));
     dispatch(
       addMessage({
         isBotMessage: false,
         text: "I'm bored, help !",
-        // image: MessageImage.Bored,
+        // image: Images.bored,
       })
     );
     dispatch(fetchActivity());

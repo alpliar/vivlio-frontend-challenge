@@ -1,4 +1,5 @@
 import { Button } from "@chakra-ui/react";
+import React from "react";
 import {
   acceptActivity,
   declineActivity,
@@ -7,9 +8,7 @@ import {
 import { useAppDispatch } from "./app/hooks";
 import Message from "./Message";
 
-type Props = {};
-
-const AnswerButtons = (props: Props) => {
+const AnswerButtons: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleAcceptActivity = () => {
