@@ -64,9 +64,6 @@ export const messagesSlice = createSlice({
     addMessage: (state, action: PayloadAction<IMessage>) => {
       state.messages.push(action.payload);
     },
-    resetChat: (state) => {
-      state = initialState;
-    },
     toggleLoading: (state) => {
       state.isLoading = !state.isLoading;
     },
@@ -105,7 +102,6 @@ export const messagesSlice = createSlice({
       .addCase(fetchActivity.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = undefined;
-        // Add any fetched posts to the array
         state.messages = state.messages.concat({
           activity: action.payload,
           isBotMessage: true,
@@ -132,7 +128,6 @@ export const fetchActivity = createAsyncThunk(
 // Action creators are generated for each case reducer function
 export const {
   addMessage,
-  resetChat,
   toggleLoading,
   acceptActivity,
   declineActivity,

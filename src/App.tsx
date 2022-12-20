@@ -5,7 +5,7 @@ import {
   SlideFade,
   Stack,
 } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import AnswerButtons from "./AnswerButtons";
 import { useAppSelector } from "./app/hooks";
 import { RootState } from "./app/store";
@@ -15,7 +15,7 @@ import Message from "./Message";
 import MessageError from "./MessageError";
 import customTheme from "./theme";
 
-export const App = () => {
+export const App: React.FC = () => {
   const bottomRef = useRef<null | HTMLDivElement>(null);
   const { error, messages, isUserBored, isAnswerNeeded } = useAppSelector(
     (state: RootState) => state.chat
