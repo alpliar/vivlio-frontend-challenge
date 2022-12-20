@@ -15,6 +15,9 @@ const tagStyle: TagProps = {
 const MessageActivity: React.FC<IMessageActivityProps> = ({
   activity: { activity, accessibility, price, link, participants, type },
 }) => {
+  const accessibilityLabel =
+    ActivityHelper.getAccessibilityLabel(accessibility);
+  const priceLabel = ActivityHelper.getPriceLabel(price);
   const categoryInfos = ActivityHelper.getCategoryInfos(type);
   return (
     <>
@@ -45,10 +48,8 @@ const MessageActivity: React.FC<IMessageActivityProps> = ({
       </Text>
       <Box>
         <Wrap justify="end" maxW="lg" ml="auto">
-          <Tag {...tagStyle}>
-            {ActivityHelper.getAccessibilityLabel(accessibility)}
-          </Tag>
-          <Tag {...tagStyle}>{ActivityHelper.getPriceLabel(price)}</Tag>
+          <Tag {...tagStyle}>{accessibilityLabel}</Tag>
+          <Tag {...tagStyle}>{priceLabel}</Tag>
           {participants && (
             <Tag {...tagStyle}>
               <span>
