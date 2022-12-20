@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MessageImage } from "../../../constants/messages.constants";
+import Images from "../../../constants/messages.constants";
 import { IActivity } from "../../../models/activity.model";
 import IMessage from "../../../models/message.model";
 import ActivityHelper from "../../../services/activities.service";
@@ -30,16 +30,17 @@ const initialState: MessagesState = {
 
 const acceptActivityMessage: IMessage = {
   text: "Thank's, that sounds nice 😁 !",
-  image: MessageImage.Nice,
+  image: Images.nice,
 };
 const declineActivityMessage: IMessage = {
   text: "Hmm... Maybe another time 🙃",
-  image: MessageImage.Hmm,
+  image: Images.hmm,
 };
 const conclusionMessage: IMessage = {
   text: "No problem, feel free to come back to me next time you're bored 😊",
   isBotMessage: true,
   isDelayed: true,
+  image: Images.conclusion,
 };
 const retryFetchActivityMessage: IMessage = {
   text: "Could you please retry ?",

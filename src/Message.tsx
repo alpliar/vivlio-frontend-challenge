@@ -1,4 +1,11 @@
-import { Image, SlideFade, Stack, StackProps, Text } from "@chakra-ui/react";
+import {
+  Center,
+  Image,
+  SlideFade,
+  Stack,
+  StackProps,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import BotAvatar from "./BotAvatar";
 import Bubble, { IBubbleProps } from "./Bubble";
@@ -59,10 +66,14 @@ const Message: React.FC<IMessageProps> = ({ children, message }) => {
           {message.text && <Text>{message.text}</Text>}
           {message.activity && <MessageActivity activity={message.activity} />}
           {message.image && (
-            <Image
-              src={message.image}
-              alt={`Picture illustrating ${message.text}`}
-            />
+            <Center>
+              <Image
+                borderRadius="full"
+                width={200}
+                src={message.image}
+                alt={`Picture illustrating ${message.text}`}
+              />
+            </Center>
           )}
         </Bubble>
       </Stack>
