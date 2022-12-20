@@ -51,7 +51,12 @@ const Message: React.FC<IMessageProps> = ({ children, message }) => {
       delay={message.isDelayed ? delay : 0}
       offsetY={message.isBotMessage ? 0 : 50}
     >
-      <Stack padding={1} direction={stackDirection} align="flex-end">
+      <Stack
+        padding={1}
+        direction={stackDirection}
+        align="flex-end"
+        spacing={{ base: -2, md: 2 }}
+      >
         {message.isBotMessage ? (
           <BotAvatar isOnline={!message.isErrorMessage} />
         ) : (
